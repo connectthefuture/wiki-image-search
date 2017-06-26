@@ -8,7 +8,7 @@ import java.util.Map;
  * Created by pinaki on 6/26/17.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ImageSearchResult {
+/* package */ class ImageSearchResult {
     String batchcomplete;
     Query query;
 
