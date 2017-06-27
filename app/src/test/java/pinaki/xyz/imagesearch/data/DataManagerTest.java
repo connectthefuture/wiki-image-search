@@ -18,14 +18,13 @@ import java.util.Map;
 public class DataManagerTest {
     @Test
     public void queryTest() throws Exception {
-        DataManager dm = new DataManager();
         String url = "https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&piprop=thumbnail&pithumbsize=96&pilimit=50&generator=prefixsearch&gpssearch=Cat&gpslimit=50";
-        System.out.println(dm.get(url));
+        System.out.println(DataManager.getInstance().get(url));
     }
 
     @Test
     public void queryThumbNailsTest() throws Exception {
-        DataManager dm = new DataManager();
+        DataManager dm = DataManager.getInstance();
         List<String> l = dm.queryThumbNails("dog");
         System.out.println(l);
 
@@ -33,8 +32,7 @@ public class DataManagerTest {
 
     @Test
     public void querySourceImageTest() throws Exception {
-        DataManager dm = new DataManager();
-        List<String> l = dm.querySourceImageByID("5282");
+        List<String> l = DataManager.getInstance().querySourceImageByID("5282");
         System.out.println(l);
 
     }

@@ -26,7 +26,14 @@ public class DataManager {
     private static final String SOURCE_IMAGE_QUERY_URL = "https://en.wikipedia.org/w/api.php?action=query&prop=" +
             "pageimages&format=json&piprop=original&pageids=";
     private final ObjectMapper mapper;
-    public DataManager() {
+    private static DataManager SINGLETON;
+    public static DataManager getInstance() {
+        if (SINGLETON == null) {
+            SINGLETON = new DataManager();
+        }
+        return SINGLETON;
+    }
+    private DataManager() {
         mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -41,7 +48,7 @@ public class DataManager {
         return response.body() != null ? response.body().string() : null;
     }
 
-    List<String> queryThumbNails(String query) {
+    public List<String> queryThumbNails(String query) {
         List<String> thumbSrc = new ArrayList<>();
         try {
             String s = get(THUMBNAIL_QUERY_URL + query);
