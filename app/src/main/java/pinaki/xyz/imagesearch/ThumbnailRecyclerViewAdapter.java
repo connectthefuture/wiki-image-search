@@ -17,22 +17,23 @@ import java.util.List;
 public class ThumbnailRecyclerViewAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
     private List<WikiImage> imageList;
     private Context context;
-    public ThumbnailRecyclerViewAdapter(Context context, List<WikiImage> itemList) {
+    private int thumbnailSizePx;
+    public ThumbnailRecyclerViewAdapter(Context context, List<WikiImage> itemList, int size) {
         this.context = context;
         this.imageList = itemList;
+        this.thumbnailSizePx = size;
     }
     @Override
     public ThumbnailViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_item, null);
-        ThumbnailViewHolder thumbnailViewHolder = new ThumbnailViewHolder(layoutView);
-        return thumbnailViewHolder;
+        return new ThumbnailViewHolder(layoutView);
     }
 
     @Override
     public void onBindViewHolder(ThumbnailViewHolder holder, int position) {
-//        holder.thumbnail.setImageURI(imageList.get(position).url); // use Picasso HERE
         holder.title.setText(imageList.get(position).title);
-        Picasso.with(context).load(imageList.get(position).url).into(holder.thumbnail);
+        Picasso.with(context).load(imageList.get(position).url).resize(thumbnailSizePx, thumbnailSizePx).centerCrop().into(holder
+                .thumbnail);
     }
 
     @Override

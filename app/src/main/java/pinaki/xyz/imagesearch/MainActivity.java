@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -34,8 +35,12 @@ public class MainActivity extends AppCompatActivity {
 
         List<WikiImage> tempList = getTempList();
 
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int thumbnailWidth = metrics.widthPixels / 4;
+
         ThumbnailRecyclerViewAdapter thumbnailRecyclerViewAdapter = new ThumbnailRecyclerViewAdapter(
-                MainActivity.this, tempList);
+                MainActivity.this, tempList, thumbnailWidth);
         recyclerView.setAdapter(thumbnailRecyclerViewAdapter);
     }
 
