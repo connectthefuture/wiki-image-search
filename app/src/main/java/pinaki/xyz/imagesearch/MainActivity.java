@@ -1,14 +1,20 @@
 package pinaki.xyz.imagesearch;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +28,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        queryThread = new ApiQueryThread(createUIHandler());
+        queryThread.start();
+        queryThread.prepareHandler();
         setContentView(R.layout.search_results);
         initLayout();
+        handleSearchIntent(getIntent());
     }
 
     // create the staggeredview and the layout manager.
@@ -45,12 +55,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+        return true;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleSearchIntent(intent);
+    }
+
+    private void handleSearchIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            //use the query to search your data somehow
+            queryThread.queueQuery(query);
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        queryThread = new ApiQueryThread(createUIHandler());
-        queryThread.start();
-        queryThread.prepareHandler();
-        queryThread.queueQuery("Dog"); // example query TODO: get stuff from UI input.
     }
 
     private void startWorkerThread() {
@@ -80,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         queryThread.quit();
     }
 
