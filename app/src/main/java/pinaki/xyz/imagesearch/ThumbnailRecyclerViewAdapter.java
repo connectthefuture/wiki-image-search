@@ -23,6 +23,11 @@ public class ThumbnailRecyclerViewAdapter extends RecyclerView.Adapter<Thumbnail
         this.imageList = itemList;
         this.thumbnailSizePx = size;
     }
+
+    public void update(List<WikiImage> itemList) {
+        this.imageList = itemList;
+
+    }
     @Override
     public ThumbnailViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_item, null);

@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     /* package */ static final int THUMBNAIL_DOWNLOAD = 1;
     private ApiQueryThread  queryThread;
+    private ThumbnailRecyclerViewAdapter thumbnailRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +34,13 @@ public class MainActivity extends AppCompatActivity {
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        List<WikiImage> tempList = getTempList();
+        List<WikiImage> tempList = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int thumbnailWidth = metrics.widthPixels / 4;
 
-        ThumbnailRecyclerViewAdapter thumbnailRecyclerViewAdapter = new ThumbnailRecyclerViewAdapter(
-                MainActivity.this, tempList, thumbnailWidth);
+        thumbnailRecyclerViewAdapter = new ThumbnailRecyclerViewAdapter(MainActivity.this, tempList, thumbnailWidth);
         recyclerView.setAdapter(thumbnailRecyclerViewAdapter);
     }
 
@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
                     case THUMBNAIL_DOWNLOAD:
                         String url = (String) msg.obj;
                         Log.i(TAG, url);
+                        thumbnailRecyclerViewAdapter.update(getTempList());
+                        thumbnailRecyclerViewAdapter.notifyDataSetChanged();
                         break;
                     default:
                         break;
