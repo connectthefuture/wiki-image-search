@@ -1,8 +1,5 @@
 package pinaki.xyz.imagesearch;
 
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -33,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         queryThread.prepareHandler();
         setContentView(R.layout.search_results);
         initLayout();
-        handleSearchIntent(getIntent());
     }
 
     // create the staggeredview and the layout manager.
@@ -58,16 +54,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.i(TAG, "submit: " + query);
+                queryThread.queueQuery(query);
                 return true;
             }
 
@@ -82,26 +75,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        handleSearchIntent(intent);
-    }
-
-    private void handleSearchIntent(Intent intent) {
-        Log.i(TAG, "handleSearchIntent");
-//        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-//            String query = intent.getStringExtra(SearchManager.QUERY);
-//            //use the query to search your data somehow
-//            queryThread.queueQuery(query);
-//        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-    }
-
-    private void startWorkerThread() {
-
     }
 
     private Handler createUIHandler() {

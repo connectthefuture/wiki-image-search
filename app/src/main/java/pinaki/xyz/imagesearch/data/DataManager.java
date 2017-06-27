@@ -53,15 +53,17 @@ public class DataManager {
         List<WikiImage> wikiImages = new ArrayList<>();
         try {
             String s = get(THUMBNAIL_QUERY_URL + query);
-            ImageSearchResult imgSearchResult = null;
-            imgSearchResult = mapper.readValue(s, ImageSearchResult.class);
-            for (Map.Entry<String, ImageSearchResult.Page> entry : imgSearchResult.query.pages.entrySet() ) {
-                if (entry.getValue().thumbnail != null && entry.getValue().thumbnail.source != null) {
-                    WikiImage wikiImage = new WikiImage(entry.getValue().thumbnail.source, entry.getValue().title,
-                            entry.getValue().thumbnail.width, entry.getValue().thumbnail.height);
-                    wikiImages.add(wikiImage);
+            ImageSearchResult imgSearchResult = mapper.readValue(s, ImageSearchResult.class);
+            if (imgSearchResult != null && imgSearchResult.query != null && imgSearchResult.query.pages != null) {
+                for (Map.Entry<String, ImageSearchResult.Page> entry : imgSearchResult.query.pages.entrySet() ) {
+                    if (entry.getValue().thumbnail != null && entry.getValue().thumbnail.source != null) {
+                        WikiImage wikiImage = new WikiImage(entry.getValue().thumbnail.source, entry.getValue().title,
+                                entry.getValue().thumbnail.width, entry.getValue().thumbnail.height);
+                        wikiImages.add(wikiImage);
+                    }
                 }
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,11 +74,12 @@ public class DataManager {
         List<String> thumbSrc = new ArrayList<>();
         try {
             String s = get(SOURCE_IMAGE_QUERY_URL + query);
-            ImageSearchResult imgSearchResult = null;
-            imgSearchResult = mapper.readValue(s, ImageSearchResult.class);
-            for (Map.Entry<String, ImageSearchResult.Page> entry : imgSearchResult.query.pages.entrySet() ) {
-                if (entry.getValue().original != null && entry.getValue().original.source != null) {
-                    thumbSrc.add(entry.getValue().original.source);
+            ImageSearchResult imgSearchResult = mapper.readValue(s, ImageSearchResult.class);
+            if (imgSearchResult != null && imgSearchResult.query != null && imgSearchResult.query.pages != null) {
+                for (Map.Entry<String, ImageSearchResult.Page> entry : imgSearchResult.query.pages.entrySet() ) {
+                    if (entry.getValue().original != null && entry.getValue().original.source != null) {
+                        thumbSrc.add(entry.getValue().original.source);
+                    }
                 }
             }
         } catch (IOException e) {
