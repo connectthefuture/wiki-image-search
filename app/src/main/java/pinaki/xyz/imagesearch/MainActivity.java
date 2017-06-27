@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         queryThread = new ApiQueryThread(createUIHandler());
         queryThread.start();
         queryThread.prepareHandler();
-        queryThread.queueQuery("India"); // example query TODO: get stuff from UI input.
+        queryThread.queueQuery("Dog"); // example query TODO: get stuff from UI input.
     }
 
     private void startWorkerThread() {
@@ -63,11 +63,10 @@ public class MainActivity extends AppCompatActivity {
             public boolean handleMessage(Message msg) {
                 // GET THE URLs and do stuff here
                 switch (msg.what) {
-                    // if SEARCH URL DOWNLOAD COMPLETED RENDER THEM
                     case THUMBNAIL_DOWNLOAD:
-                        String url = (String) msg.obj;
-                        Log.i(TAG, url);
-                        thumbnailRecyclerViewAdapter.update(getTempList());
+                        List<WikiImage> images = (List<WikiImage>) msg.obj;
+                        Log.i(TAG, "Num Images: " + images.size());
+                        thumbnailRecyclerViewAdapter.update(images);
                         thumbnailRecyclerViewAdapter.notifyDataSetChanged();
                         break;
                     default:

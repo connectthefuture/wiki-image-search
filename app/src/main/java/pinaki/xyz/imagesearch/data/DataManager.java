@@ -14,6 +14,7 @@ import java.util.Map;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import pinaki.xyz.imagesearch.WikiImage;
 
 /**
  * Created by pinaki on 6/26/17.
@@ -48,21 +49,23 @@ public class DataManager {
         return response.body() != null ? response.body().string() : null;
     }
 
-    public List<String> queryThumbNails(String query) {
-        List<String> thumbSrc = new ArrayList<>();
+    public List<WikiImage> queryThumbNails(String query) {
+        List<WikiImage> wikiImages = new ArrayList<>();
         try {
             String s = get(THUMBNAIL_QUERY_URL + query);
             ImageSearchResult imgSearchResult = null;
             imgSearchResult = mapper.readValue(s, ImageSearchResult.class);
             for (Map.Entry<String, ImageSearchResult.Page> entry : imgSearchResult.query.pages.entrySet() ) {
                 if (entry.getValue().thumbnail != null && entry.getValue().thumbnail.source != null) {
-                    thumbSrc.add(entry.getValue().thumbnail.source);
+                    WikiImage wikiImage = new WikiImage(entry.getValue().thumbnail.source, entry.getValue().title,
+                            entry.getValue().thumbnail.width, entry.getValue().thumbnail.height);
+                    wikiImages.add(wikiImage);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return thumbSrc;
+        return wikiImages;
     }
 
     List<String> querySourceImageByID(String query) {

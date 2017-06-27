@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import pinaki.xyz.imagesearch.WikiImage;
+
 /**
  * Created by pinaki on 6/26/17.
  */
@@ -25,8 +27,8 @@ public class DataManagerTest {
     @Test
     public void queryThumbNailsTest() throws Exception {
         DataManager dm = DataManager.getInstance();
-        List<String> l = dm.queryThumbNails("dog");
-        System.out.println(l);
+        List<WikiImage> l = dm.queryThumbNails("dog");
+        System.out.println(l.size());
 
     }
 

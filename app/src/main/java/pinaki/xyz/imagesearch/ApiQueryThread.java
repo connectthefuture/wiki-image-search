@@ -24,20 +24,18 @@ import pinaki.xyz.imagesearch.data.DataManager;
         apiQueryHandler = new Handler(getLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
-                // TODO: query should be parsed from msg
-                // Whethers its thumbnail or full res should be parsed from WHAT
-                List<String> l = null;
+                List<WikiImage> wikiImages = null;
                 switch (msg.what) {
                     case MainActivity.THUMBNAIL_DOWNLOAD:
                         String query = (String) msg.obj;
-                        l = DataManager.getInstance().queryThumbNails(query);
+                        wikiImages = DataManager.getInstance().queryThumbNails(query);
                         break;
                     default:
                         break;
                 }
                 // POST THE RESULTS BACK TO mResponseHandler
-                if (mResponseHandler != null && l != null) {
-                    mResponseHandler.obtainMessage(msg.what, l.get(0)).sendToTarget();
+                if (mResponseHandler != null && wikiImages != null) {
+                    mResponseHandler.obtainMessage(msg.what, wikiImages).sendToTarget();
                 }
 //                msg.recycle();
                 return true;
