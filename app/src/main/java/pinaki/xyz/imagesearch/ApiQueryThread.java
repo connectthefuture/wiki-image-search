@@ -3,6 +3,7 @@ package pinaki.xyz.imagesearch;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.util.Log;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ import pinaki.xyz.imagesearch.data.DataManager;
 
 /* package */ final class ApiQueryThread extends HandlerThread {
     private static final String TAG = ApiQueryThread.class.getSimpleName();
+    private static final int PAUSE_BEFORE_QUERY_MS = 500;
+    private static final int MIN_LENGTH_FOR_QUERY = 2;
     private Handler mResponseHandler; // typically the ui handler where the messages will be posted back.
     private Handler apiQueryHandler;
     /* package */ ApiQueryThread(Handler responseHandler) {
@@ -28,7 +31,10 @@ import pinaki.xyz.imagesearch.data.DataManager;
                 switch (msg.what) {
                     case MainActivity.THUMBNAIL_DOWNLOAD:
                         String query = (String) msg.obj;
-                        wikiImages = DataManager.getInstance().queryThumbNails(query);
+                        if (query != null && query.length() >= MIN_LENGTH_FOR_QUERY) {
+                            Log.i("MainActivity", "querying: " + query);
+                            wikiImages = DataManager.getInstance().queryThumbNails(query);
+                        }
                         break;
                     default:
                         break;
@@ -44,6 +50,8 @@ import pinaki.xyz.imagesearch.data.DataManager;
     }
 
     /* package */ void queueQuery(String query) {
-        apiQueryHandler.obtainMessage(MainActivity.THUMBNAIL_DOWNLOAD, query).sendToTarget();
+        Message msg = apiQueryHandler.obtainMessage(MainActivity.THUMBNAIL_DOWNLOAD, query);
+        apiQueryHandler.removeCallbacksAndMessages(null);
+        apiQueryHandler.sendMessageDelayed(msg, PAUSE_BEFORE_QUERY_MS);
     }
 }

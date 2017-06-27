@@ -64,7 +64,20 @@ public class MainActivity extends AppCompatActivity {
                 (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.i(TAG, "submit: " + query);
+                return true;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.i(TAG, "change: " + newText);
+                queryThread.queueQuery(newText);
+                return true;
+            }
+        });
         return true;
     }
 
@@ -74,11 +87,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleSearchIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to search your data somehow
-            queryThread.queueQuery(query);
-        }
+        Log.i(TAG, "handleSearchIntent");
+//        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+//            String query = intent.getStringExtra(SearchManager.QUERY);
+//            //use the query to search your data somehow
+//            queryThread.queueQuery(query);
+//        }
     }
 
     @Override
@@ -116,33 +130,6 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         queryThread.quit();
-    }
-
-    private static List<WikiImage> getTempList() {
-        List<WikiImage> imageList = new ArrayList<>();
-        String url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Low_Temperature_Oxidation_Catalyst" +
-                ".jpeg/96px-Low_Temperature_Oxidation_Catalyst.jpeg";
-        String title = "Title 1";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Oscilloscopic_tube.jpg/96px-Oscilloscopic_tube.jpg";
-        title = "Title 2";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Flag_of_Catalonia.svg/96px-Flag_of_Catalonia.svg.png";
-        title = "Title 3";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Catherine_aragon.jpg/73px-Catherine_aragon.jpg";
-        title = "Title 4";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Kette_Kettenkurve_Catenary_2008_PD.JPG/96px-Kette_Kettenkurve_Catenary_2008_PD.JPG";
-        title = "Title 5";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Catherine-de-medici.jpg/71px-Catherine-de-medici.jpg";
-        title = "Title 6";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Catania-Etna-Sicilia-Italy-Castielli_CC0_HQ1.JPG/96px-Catania-Etna-Sicilia-Italy-Castielli_CC0_HQ1.JPG";
-        title = "Title 7";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        return imageList;
     }
 
 }
