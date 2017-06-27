@@ -2,17 +2,13 @@ package pinaki.xyz.imagesearch;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
-import java.util.List;
-
-import pinaki.xyz.imagesearch.data.DataManager;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private HandlerThread  queryThread;
+    private ApiQueryThread  queryThread;
     Handler workerHandler;
 
     @Override
@@ -24,16 +20,43 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        queryThread = new HandlerThread(TAG);
+//        queryThread = new HandlerThread(TAG);
+//        queryThread.start();
+//        Handler workerHandler = new Handler(queryThread.getLooper());
+//        workerHandler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                List<String> l = DataManager.getInstance().queryThumbNails("Cat");
+//                Log.i(TAG, l.get(0));
+//            }
+//        });
+        queryThread = new ApiQueryThread(createUIHandler());
         queryThread.start();
-        Handler workerHandler = new Handler(queryThread.getLooper());
-        workerHandler.post(new Runnable() {
+        queryThread.prepareHandler();
+        queryThread.queueQuery("Cat"); // example query
+
+//        workerHandler.sendMessage();
+//        Handler h = new Handler();
+    }
+
+    private void startWorkerThread() {
+
+    }
+
+    private Handler createUIHandler() {
+        Handler uiHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
-            public void run() {
-                List<String> l = DataManager.getInstance().queryThumbNails("Cat");
-                Log.i(TAG, l.get(0));
+            public boolean handleMessage(Message msg) {
+                // GET THE URLs and do stuff here
+//                msg.a
+                switch (msg.what) {
+                    // if SEARCH URL DOWNLOAD COMPLETED RENDER THEM
+                    // if HIGH RES DNLD COMPLETED RENDER THEm
+                }
+                return false;
             }
         });
+        return uiHandler;
     }
 
     @Override
