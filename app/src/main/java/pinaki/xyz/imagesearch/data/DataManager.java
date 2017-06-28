@@ -14,7 +14,7 @@ import java.util.Map;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import pinaki.xyz.imagesearch.WikiImage;
+import pinaki.xyz.imagesearch.WikiData;
 
 /**
  * Created by pinaki on 6/26/17.
@@ -24,6 +24,9 @@ public class DataManager {
     private static final String THUMBNAIL_QUERY_URL = "https://en.wikipedia.org/w/api" +
             ".php?action=query&prop=pageimages&" +
             "format=json&piprop=thumbnail&pithumbsize=96&pilimit=50&generator=prefixsearch&gpslimit=50&gpssearch=";
+    private static final String THUMBNAIL_FULL_QUERY_URL = "https://en.wikipedia.org/w/api" +
+            ".php?action=query&format=json&prop=pageimages&generator=prefixsearch&piprop" +
+            "=original%7Cthumbnail&gpslimit=50&gpssearch=";
     private static final String SOURCE_IMAGE_QUERY_URL = "https://en.wikipedia.org/w/api.php?action=query&prop=" +
             "pageimages&format=json&piprop=original&pageids=";
     private final ObjectMapper mapper;
@@ -49,25 +52,24 @@ public class DataManager {
         return response.body() != null ? response.body().string() : null;
     }
 
-    public List<WikiImage> queryThumbNails(String query) {
-        List<WikiImage> wikiImages = new ArrayList<>();
+    public List<WikiData> queryThumbNails(String query) {
+        List<WikiData> wikiDataList = new ArrayList<>();
         try {
-            String s = get(THUMBNAIL_QUERY_URL + query);
+            String s = get(THUMBNAIL_FULL_QUERY_URL + query);
             ImageSearchResult imgSearchResult = mapper.readValue(s, ImageSearchResult.class);
             if (imgSearchResult != null && imgSearchResult.query != null && imgSearchResult.query.pages != null) {
                 for (Map.Entry<String, ImageSearchResult.Page> entry : imgSearchResult.query.pages.entrySet() ) {
-                    if (entry.getValue().thumbnail != null && entry.getValue().thumbnail.source != null) {
-                        WikiImage wikiImage = new WikiImage(entry.getValue().thumbnail.source, entry.getValue().title,
-                                entry.getValue().thumbnail.width, entry.getValue().thumbnail.height);
-                        wikiImages.add(wikiImage);
-                    }
+                    String thumbnailSrc = entry.getValue().thumbnail != null ? entry.getValue().thumbnail.source : null;
+                    String originalSrc = entry.getValue().original != null ? entry.getValue().original.source : null;
+                    WikiData wikiData = new WikiData(thumbnailSrc, originalSrc, entry.getValue().title);
+                    wikiDataList.add(wikiData);
                 }
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return wikiImages;
+        return wikiDataList;
     }
 
     List<String> querySourceImageByID(String query) {

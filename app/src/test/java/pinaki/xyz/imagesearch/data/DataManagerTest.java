@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import pinaki.xyz.imagesearch.WikiImage;
+import pinaki.xyz.imagesearch.WikiData;
 
 /**
  * Created by pinaki on 6/26/17.
@@ -27,8 +27,8 @@ public class DataManagerTest {
     @Test
     public void queryThumbNailsTest() throws Exception {
         DataManager dm = DataManager.getInstance();
-        List<WikiImage> l = dm.queryThumbNails("dog");
-        System.out.println(l.size());
+        List<WikiData> l = dm.queryThumbNails("mars");
+        System.out.println(l.get(0).getOriginal());
 
     }
 
@@ -62,31 +62,31 @@ public class DataManagerTest {
         }
     }
 
-    private static List<WikiImage> getTempList() {
-        List<WikiImage> imageList = new ArrayList<>();
-        String url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Low_Temperature_Oxidation_Catalyst" +
-                ".jpeg/96px-Low_Temperature_Oxidation_Catalyst.jpeg";
-        String title = "Title 1";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Oscilloscopic_tube.jpg/96px-Oscilloscopic_tube.jpg";
-        title = "Title 2";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Flag_of_Catalonia.svg/96px-Flag_of_Catalonia.svg.png";
-        title = "Title 3";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Catherine_aragon.jpg/73px-Catherine_aragon.jpg";
-        title = "Title 4";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Kette_Kettenkurve_Catenary_2008_PD.JPG/96px-Kette_Kettenkurve_Catenary_2008_PD.JPG";
-        title = "Title 5";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Catherine-de-medici.jpg/71px-Catherine-de-medici.jpg";
-        title = "Title 6";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Catania-Etna-Sicilia-Italy-Castielli_CC0_HQ1.JPG/96px-Catania-Etna-Sicilia-Italy-Castielli_CC0_HQ1.JPG";
-        title = "Title 7";
-        imageList.add(new WikiImage(url, title, 1, 1));
-        return imageList;
-    }
+//    private static List<WikiData> getTempList() {
+//        List<WikiData> imageList = new ArrayList<>();
+//        String url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Low_Temperature_Oxidation_Catalyst" +
+//                ".jpeg/96px-Low_Temperature_Oxidation_Catalyst.jpeg";
+//        String title = "Title 1";
+//        imageList.add(new WikiData(url, title, 1, 1));
+//        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Oscilloscopic_tube.jpg/96px-Oscilloscopic_tube.jpg";
+//        title = "Title 2";
+//        imageList.add(new WikiData(url, title, 1, 1));
+//        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Flag_of_Catalonia.svg/96px-Flag_of_Catalonia.svg.png";
+//        title = "Title 3";
+//        imageList.add(new WikiData(url, title, 1, 1));
+//        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Catherine_aragon.jpg/73px-Catherine_aragon.jpg";
+//        title = "Title 4";
+//        imageList.add(new WikiData(url, title, 1, 1));
+//        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Kette_Kettenkurve_Catenary_2008_PD.JPG/96px-Kette_Kettenkurve_Catenary_2008_PD.JPG";
+//        title = "Title 5";
+//        imageList.add(new WikiData(url, title, 1, 1));
+//        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Catherine-de-medici.jpg/71px-Catherine-de-medici.jpg";
+//        title = "Title 6";
+//        imageList.add(new WikiData(url, title, 1, 1));
+//        url = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Catania-Etna-Sicilia-Italy-Castielli_CC0_HQ1.JPG/96px-Catania-Etna-Sicilia-Italy-Castielli_CC0_HQ1.JPG";
+//        title = "Title 7";
+//        imageList.add(new WikiData(url, title, 1, 1));
+//        return imageList;
+//    }
 
 }

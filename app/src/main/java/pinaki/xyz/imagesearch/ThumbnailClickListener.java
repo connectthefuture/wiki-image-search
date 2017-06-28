@@ -5,5 +5,5 @@ package pinaki.xyz.imagesearch;
  */
 
 public interface ThumbnailClickListener {
-    void onThumbnailClick(WikiImage wikiImage);
+    void onThumbnailClick(WikiData wikiData);
 }

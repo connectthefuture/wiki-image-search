@@ -27,21 +27,21 @@ import pinaki.xyz.imagesearch.data.DataManager;
         apiQueryHandler = new Handler(getLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
-                List<WikiImage> wikiImages = null;
+                List<WikiData> wikiDataList = null;
                 switch (msg.what) {
                     case MainActivity.THUMBNAIL_DOWNLOAD:
                         String query = (String) msg.obj;
                         if (query != null && query.length() >= MIN_LENGTH_FOR_QUERY) {
                             Log.i("MainActivity", "querying: " + query);
-                            wikiImages = DataManager.getInstance().queryThumbNails(query);
+                            wikiDataList = DataManager.getInstance().queryThumbNails(query);
                         }
                         break;
                     default:
                         break;
                 }
                 // POST THE RESULTS BACK TO mResponseHandler
-                if (mResponseHandler != null && wikiImages != null) {
-                    mResponseHandler.obtainMessage(msg.what, wikiImages).sendToTarget();
+                if (mResponseHandler != null && wikiDataList != null) {
+                    mResponseHandler.obtainMessage(msg.what, wikiDataList).sendToTarget();
                 }
 //                msg.recycle();
                 return true;

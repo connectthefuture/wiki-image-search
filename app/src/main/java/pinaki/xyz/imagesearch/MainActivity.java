@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements ThumbnailClickLis
     /* package */ static final int THUMBNAIL_DOWNLOAD = 1;
     private ApiQueryThread  queryThread;
     private ThumbnailRecyclerViewAdapter thumbnailRecyclerViewAdapter;
+    private boolean welcomeHidden = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements ThumbnailClickLis
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        List<WikiImage> tempList = new ArrayList<>();
+        List<WikiData> tempList = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -65,14 +66,14 @@ public class MainActivity extends AppCompatActivity implements ThumbnailClickLis
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.i(TAG, "submit: " + query);
+                hideWelcomeText();
                 queryThread.queueQuery(query);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.i(TAG, "change: " + newText);
+                hideWelcomeText();
                 queryThread.queueQuery(newText);
                 return true;
             }
@@ -85,6 +86,15 @@ public class MainActivity extends AppCompatActivity implements ThumbnailClickLis
         super.onResume();
     }
 
+    private void hideWelcomeText() {
+        if (welcomeHidden) {
+            return;
+        }
+        View v = findViewById(R.id.welcome_text);
+        v.setVisibility(View.GONE);
+        welcomeHidden = true;
+    }
+
     private Handler createUIHandler() {
         Handler uiHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
@@ -92,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements ThumbnailClickLis
                 // GET THE URLs and do stuff here
                 switch (msg.what) {
                     case THUMBNAIL_DOWNLOAD:
-                        List<WikiImage> images = (List<WikiImage>) msg.obj;
+                        List<WikiData> images = (List<WikiData>) msg.obj;
                         Log.i(TAG, "Num Images: " + images.size());
                         thumbnailRecyclerViewAdapter.update(images);
                         thumbnailRecyclerViewAdapter.notifyDataSetChanged();
@@ -114,15 +124,14 @@ public class MainActivity extends AppCompatActivity implements ThumbnailClickLis
     }
 
     @Override
-    public void onThumbnailClick(WikiImage wikiImage) {
+    public void onThumbnailClick(WikiData wikiData) {
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
         FullScreenImageFragment fullScreenImageFragment = new FullScreenImageFragment();
-        // TODO: fix this -- this is the LowRes URL
-        fullScreenImageFragment.url = wikiImage.url;
+        fullScreenImageFragment.url = wikiData.getOriginal().url;
         fullScreenImageFragment.fragmentCloseListener = this;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.full_screen_container, fullScreenImageFragment);

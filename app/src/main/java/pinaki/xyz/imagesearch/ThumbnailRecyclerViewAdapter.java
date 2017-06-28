@@ -15,18 +15,18 @@ import java.util.List;
  */
 
 public class ThumbnailRecyclerViewAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
-    private List<WikiImage> imageList;
+    private List<WikiData> imageList;
     private Context context;
     private int thumbnailSizePx;
     private ThumbnailClickListener thumbnailClickListener;
-    public ThumbnailRecyclerViewAdapter(Context context, List<WikiImage> itemList, int size, ThumbnailClickListener thumbnailClickListener) {
+    public ThumbnailRecyclerViewAdapter(Context context, List<WikiData> itemList, int size, ThumbnailClickListener thumbnailClickListener) {
         this.context = context;
         this.imageList = itemList;
         this.thumbnailSizePx = size;
         this.thumbnailClickListener = thumbnailClickListener;
     }
 
-    public void update(List<WikiImage> itemList) {
+    public void update(List<WikiData> itemList) {
         this.imageList = itemList;
 
     }
@@ -38,10 +38,11 @@ public class ThumbnailRecyclerViewAdapter extends RecyclerView.Adapter<Thumbnail
 
     @Override
     public void onBindViewHolder(ThumbnailViewHolder holder, int position) {
-        holder.title.setText(imageList.get(position).title);
-        Picasso.with(context).load(imageList.get(position).url).resize(thumbnailSizePx, thumbnailSizePx).centerCrop()
+        holder.title.setText(imageList.get(position).getTitle());
+        Picasso.with(context).load(imageList.get(position).getThumbnail().url).resize(thumbnailSizePx, thumbnailSizePx)
+                .centerCrop()
                 .placeholder(R.drawable.placeholder).into(holder.thumbnail);
-        holder.wikiImage = imageList.get(position);
+        holder.wikiData = imageList.get(position);
     }
 
     @Override
