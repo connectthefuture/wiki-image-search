@@ -28,7 +28,7 @@ public class DataManagerTest {
     public void queryThumbNailsTest() throws Exception {
         DataManager dm = DataManager.getInstance();
         List<WikiData> l = dm.queryThumbNails("mars");
-        System.out.println(l.get(0).getOriginal());
+        System.out.println(l.get(0));
 
     }
 

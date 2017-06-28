@@ -8,22 +8,23 @@ public class WikiData {
     private String title;
     private WikiImage thumbnail;
     private WikiImage original;
-    public WikiImage getThumbnail() {
+    WikiImage getThumbnail() {
         return thumbnail;
     }
-    public WikiImage getOriginal() {
+    WikiImage getOriginal() {
         return original;
     }
 
-    public String getTitle() {
+    String getTitle() {
         return  title;
     }
 
-    public static final class WikiImage {
+    static final class WikiImage {
         int width;
         int height;
         String url;
     }
+
     public WikiData(String thumbUrl, String sourceUrl, String title) {
         this.title = title;
         thumbnail = new WikiImage();

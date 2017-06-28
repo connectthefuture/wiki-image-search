@@ -14,13 +14,18 @@ import com.squareup.picasso.Picasso;
  */
 
 public class FullScreenImageFragment extends Fragment {
-    private static final String TAG = FullScreenImageFragment.class.getSimpleName();
-    String url;
-    FragmentCloseListener fragmentCloseListener;
+    static final String TAG = FullScreenImageFragment.class.getSimpleName();
+    private String url;
+    private FragmentCloseListener fragmentCloseListener;
     int imageWidthPx = 800;
     int imageHeightPx = 1200;
     public FullScreenImageFragment() {
         // empty constructor
+    }
+
+    void setProperties(String url, FragmentCloseListener fragmentCloseListener) {
+        this.url = url;
+        this.fragmentCloseListener = fragmentCloseListener;
     }
 
     @Override

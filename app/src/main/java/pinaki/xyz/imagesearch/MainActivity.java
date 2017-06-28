@@ -131,15 +131,19 @@ public class MainActivity extends AppCompatActivity implements ThumbnailClickLis
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
         FullScreenImageFragment fullScreenImageFragment = new FullScreenImageFragment();
-        fullScreenImageFragment.url = wikiData.getOriginal().url;
-        fullScreenImageFragment.fragmentCloseListener = this;
+        fullScreenImageFragment.setProperties(wikiData.getOriginal().url, this);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.full_screen_container, fullScreenImageFragment);
-        transaction.addToBackStack(null).commit();
+        transaction.addToBackStack(FullScreenImageFragment.TAG).commit();
     }
 
     @Override
     public void onFragmentCloseClick(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
