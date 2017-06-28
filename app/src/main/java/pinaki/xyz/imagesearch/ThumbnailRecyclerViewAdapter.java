@@ -37,8 +37,8 @@ public class ThumbnailRecyclerViewAdapter extends RecyclerView.Adapter<Thumbnail
     @Override
     public void onBindViewHolder(ThumbnailViewHolder holder, int position) {
         holder.title.setText(imageList.get(position).title);
-        Picasso.with(context).load(imageList.get(position).url).resize(thumbnailSizePx, thumbnailSizePx).centerCrop().into(holder
-                .thumbnail);
+        Picasso.with(context).load(imageList.get(position).url).resize(thumbnailSizePx, thumbnailSizePx).centerCrop()
+                .placeholder(R.drawable.placeholder).into(holder.thumbnail);
     }
 
     @Override
