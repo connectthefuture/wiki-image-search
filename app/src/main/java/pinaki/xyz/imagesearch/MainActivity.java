@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ThumbnailClickListener{
+public class MainActivity extends AppCompatActivity implements ThumbnailClickListener, FragmentCloseListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     /* package */ static final int THUMBNAIL_DOWNLOAD = 1;
     private ApiQueryThread  queryThread;
@@ -120,10 +121,16 @@ public class MainActivity extends AppCompatActivity implements ThumbnailClickLis
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
         FullScreenImageFragment fullScreenImageFragment = new FullScreenImageFragment();
-        // TODO: fix this -- this is a random URL
+        // TODO: fix this -- this is the LowRes URL
         fullScreenImageFragment.url = wikiImage.url;
+        fullScreenImageFragment.fragmentCloseListener = this;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.full_screen_container, fullScreenImageFragment);
         transaction.addToBackStack(null).commit();
+    }
+
+    @Override
+    public void onFragmentCloseClick(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 }

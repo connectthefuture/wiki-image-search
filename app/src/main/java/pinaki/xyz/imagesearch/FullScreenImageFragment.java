@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 public class FullScreenImageFragment extends Fragment {
     private static final String TAG = FullScreenImageFragment.class.getSimpleName();
     String url;
+    FragmentCloseListener fragmentCloseListener;
     int imageWidthPx = 800;
     int imageHeightPx = 1200;
     public FullScreenImageFragment() {
@@ -39,6 +40,9 @@ public class FullScreenImageFragment extends Fragment {
             public void onClick(View view) {
                 // send a callback to the activity that close icon has been tapped.
                 Log.i(TAG, "onclick close button");
+                if (fragmentCloseListener!= null) {
+                    fragmentCloseListener.onFragmentCloseClick(FullScreenImageFragment.this);
+                }
             }
         });
         ImageView fullScreenImage = (ImageView)view.findViewById(R.id.full_screen_image);
