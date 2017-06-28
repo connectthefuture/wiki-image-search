@@ -18,10 +18,12 @@ public class ThumbnailRecyclerViewAdapter extends RecyclerView.Adapter<Thumbnail
     private List<WikiImage> imageList;
     private Context context;
     private int thumbnailSizePx;
-    public ThumbnailRecyclerViewAdapter(Context context, List<WikiImage> itemList, int size) {
+    private ThumbnailClickListener thumbnailClickListener;
+    public ThumbnailRecyclerViewAdapter(Context context, List<WikiImage> itemList, int size, ThumbnailClickListener thumbnailClickListener) {
         this.context = context;
         this.imageList = itemList;
         this.thumbnailSizePx = size;
+        this.thumbnailClickListener = thumbnailClickListener;
     }
 
     public void update(List<WikiImage> itemList) {
@@ -31,7 +33,7 @@ public class ThumbnailRecyclerViewAdapter extends RecyclerView.Adapter<Thumbnail
     @Override
     public ThumbnailViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_item, null);
-        return new ThumbnailViewHolder(layoutView);
+        return new ThumbnailViewHolder(layoutView, thumbnailClickListener);
     }
 
     @Override
@@ -39,6 +41,7 @@ public class ThumbnailRecyclerViewAdapter extends RecyclerView.Adapter<Thumbnail
         holder.title.setText(imageList.get(position).title);
         Picasso.with(context).load(imageList.get(position).url).resize(thumbnailSizePx, thumbnailSizePx).centerCrop()
                 .placeholder(R.drawable.placeholder).into(holder.thumbnail);
+        holder.wikiImage = imageList.get(position);
     }
 
     @Override

@@ -1,9 +1,11 @@
 package pinaki.xyz.imagesearch;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -12,11 +14,13 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ThumbnailClickListener{
     private static final String TAG = MainActivity.class.getSimpleName();
     /* package */ static final int THUMBNAIL_DOWNLOAD = 1;
     private ApiQueryThread  queryThread;
@@ -46,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int thumbnailWidth = metrics.widthPixels / 4;
 
-        thumbnailRecyclerViewAdapter = new ThumbnailRecyclerViewAdapter(MainActivity.this, tempList, thumbnailWidth);
+        thumbnailRecyclerViewAdapter = new ThumbnailRecyclerViewAdapter(MainActivity.this, tempList, thumbnailWidth,
+                this);
         recyclerView.setAdapter(thumbnailRecyclerViewAdapter);
     }
 
@@ -107,4 +112,18 @@ public class MainActivity extends AppCompatActivity {
         queryThread.quit();
     }
 
+    @Override
+    public void onThumbnailClick(WikiImage wikiImage) {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        FullScreenImageFragment fullScreenImageFragment = new FullScreenImageFragment();
+        // TODO: fix this -- this is a random URL
+        fullScreenImageFragment.url = wikiImage.url;
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.full_screen_container, fullScreenImageFragment);
+        transaction.addToBackStack(null).commit();
+    }
 }

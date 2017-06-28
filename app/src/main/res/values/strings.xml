@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Wiki ImageSearch</string>
     <string name="search_title">Search Wikipedia</string>
+    <string name="full_screen_image">full_screen_image</string>
+    <string name="welcome_text">Type Above to Start Search</string>
 </resources>

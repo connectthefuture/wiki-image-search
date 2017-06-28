@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
+               android:id="@+id/full_screen_image" android:contentDescription="@string/full_screen_image"/>
+    <ImageView android:layout_width="50dp" android:layout_height="50dp" android:id="@+id/full_screen_close_icon"
+               android:src="@drawable/close_icon_red" android:layout_alignParentRight="true"
+               />
+
+</RelativeLayout>

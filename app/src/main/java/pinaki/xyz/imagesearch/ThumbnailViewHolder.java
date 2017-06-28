@@ -14,16 +14,20 @@ public class ThumbnailViewHolder extends RecyclerView.ViewHolder implements View
     // TODO: add butterknife here ?
     public TextView title;
     public ImageView thumbnail;
+    public WikiImage wikiImage;
+    private ThumbnailClickListener thumbnailClickListener;
 
-    public ThumbnailViewHolder(View itemView) {
+    public ThumbnailViewHolder(View itemView, ThumbnailClickListener thumbnailClickListener) {
         super(itemView);
         itemView.setOnClickListener(this);
         title = (TextView) itemView.findViewById(R.id.thumbnail_title);
         thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail_image);
+        this.thumbnailClickListener = thumbnailClickListener;
     }
 
     @Override
     public void onClick(View v) {
         Toast.makeText(v.getContext(), "Clicked Position = " + getPosition(), Toast.LENGTH_SHORT).show();
+        this.thumbnailClickListener.onThumbnailClick(wikiImage);
     }
 }
