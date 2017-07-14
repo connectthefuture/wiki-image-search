@@ -21,12 +21,16 @@ import android.view.inputmethod.InputMethodManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements ThumbnailClickListener, FragmentCloseListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     /* package */ static final int THUMBNAIL_DOWNLOAD = 1;
     private ApiQueryThread  queryThread;
     private ThumbnailRecyclerViewAdapter thumbnailRecyclerViewAdapter;
     private boolean welcomeHidden = false;
+    @BindView(R.id.welcome_text) View welcomeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements ThumbnailClickLis
         queryThread.start();
         queryThread.prepareHandler();
         setContentView(R.layout.search_results);
+        ButterKnife.bind(this);
         initLayout();
     }
 
@@ -90,8 +95,7 @@ public class MainActivity extends AppCompatActivity implements ThumbnailClickLis
         if (welcomeHidden) {
             return;
         }
-        View v = findViewById(R.id.welcome_text);
-        v.setVisibility(View.GONE);
+        welcomeText.setVisibility(View.GONE);
         welcomeHidden = true;
     }
 
